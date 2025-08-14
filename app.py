@@ -91,7 +91,7 @@ MOCK_LOCAL_ADVISORIES = {
 
 def haversine(lat1, lon1, lat2, lon2):
     """Calculates the distance between two geographical points in kilometers."""
-    R = 6371  # Radius of Earth in kilometers
+    R = 6371
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
     a = math.sin(dlat / 2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2)**2
@@ -217,4 +217,3 @@ def analyze_route():
         'hazards': all_hazards,
         'satelliteUrl': satellite_url
     })
-
