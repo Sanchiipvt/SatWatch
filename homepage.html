@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatWatch - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0d1a26; color: #b7c6c6; }
+    </style>
+</head>
+<body class="font-sans">
+
+    <nav class="bg-[#1a2b38] p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="home.html" class="text-2xl font-bold text-[#F3D9A1]">SatWatch</a>
+            <div class="space-x-4">
+                <a href="home.html" class="text-white hover:text-[#F3D9A1]">Home</a>
+                <a href="index.html" class="text-white hover:text-[#F3D9A1]">Route Analysis</a>
+                <a href="team.html" class="text-white hover:text-[#F3D9A1]">Our Team</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-8 text-center">
+        <header class="my-16">
+            <h1 class="text-6xl font-bold text-[#F3D9A1]">Welcome to SatWatch</h1>
+            <p class="text-[#b7c6c6] italic mt-4 text-xl">Intelligent Route Safety Analysis Using Real-Time Satellite and Hazard Data.</p>
+            <a href="index.html" class="mt-8 inline-block bg-[#F3D9A1] text-black font-bold py-3 px-8 rounded-lg text-xl hover:bg-opacity-90 transition-all">
+                Analyze a Route Now
+            </a>
+        </header>
+
+        <section class="my-16">
+            <h2 class="text-4xl font-bold text-[#b7c6c6] mb-8">How It Works</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="bg-[#1a2b38] p-6 rounded-lg">
+                    <h3 class="text-2xl font-bold text-[#F3D9A1] mb-2">Live Routing</h3>
+                    <p>Calculates the most efficient driving route between any two points using the Open Source Routing Machine (OSRM).</p>
+                </div>
+                <div class="bg-[#1a2b38] p-6 rounded-lg">
+                    <h3 class="text-2xl font-bold text-[#F3D9A1] mb-2">Hazard Detection</h3>
+                    <p>Scans global disaster databases (GDACS) for major events like earthquakes and cyclones near your path.</p>
+                </div>
+                <div class="bg-[#1a2b38] p-6 rounded-lg">
+                    <h3 class="text-2xl font-bold text-[#F3D9A1] mb-2">AI-Powered Analysis</h3>
+                    <p>Uses Natural Language Processing (NLP) to read real-time news feeds, identify local hazards, and determine if they are relevant to your journey.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>

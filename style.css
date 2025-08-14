@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #042125; 
+    color: #e1f2f3; 
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+}
+
+.font-roboto-mono {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.panel {
+    background-color: #032c2e; 
+    border: 1px solid #13595b; 
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    border: 1px solid #13595b;
+    z-index: 1;
+}
+
+.homepage-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(4, 33, 37, 0.7), rgba(3, 44, 46, 0.7)), url('https://images.unsplash.com/photo-1543722530-d2c624ef1b95?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat fixed;
+    z-index: -1;
+    animation: fade-in-bg 2s ease-in-out forwards;
+}
+
+@keyframes fade-in-bg {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.cta-button, .action-button {
+    transition: all 0.3s ease-in-out;
+    border-radius: 9999px; 
+    font-weight: 700;
+}
+
+.cta-button {
+    background-color: #b7c6c6; 
+    color: #032c2e; 
+    box-shadow: 0 4px 10px rgba(183, 198, 198, 0.4);
+}
+
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(207, 224, 224, 0.6);
+    background-color: #cfe0e0; 
+}
+
+.action-button {
+    background-color: #739997; 
+    color: #e1f2f3; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.4);
+    background-color: #508683; 
+}
+
+.team-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background-color: #032c2e;
+    border: 1px solid #13595b; 
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(183, 198, 198, 0.4); 
+}
+
+.profile-container {
+    width: 9rem; 
+    height: 9rem; 
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.5rem;
+    border: 4px solid #b7c6c6; 
+}
+
+.team-profile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.animate-pulse {
+    animation: pulse-color 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-color {
+    0%, 100% {
+        background-color: #b7c6c6; 
+    }
+    50% {
+        background-color: #cfe0e0; 
+    }
+}
+
+.pulse-animation {
+    animation: button-pulse 2s infinite ease-in-out;
+}
+
+@keyframes button-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+.animate-fade-in-down {
+    animation: fadeInDown 1s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0;
+}
+
+.animate-fade-in-up.delay-100 { animation-delay: 0.1s; }
+.animate-fade-in-up.delay-200 { animation-delay: 0.2s; }
+.animate-fade-in-up.delay-300 { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
