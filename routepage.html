@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatWatch - Route Safety Analysis</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0d1a26;
+            color: #b7c6c6;
+        }
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: #1a2b38;
+            color: #cfe0e0;
+            border: 1px solid #F3D9A1;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-5xl font-bold text-[#F3D9A1]">SatWatch</h1>
+            <p class="text-[#b7c6c6] italic mt-2">Real-Time Route Safety Analysis</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-[#1a2b38] p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-bold text-[#b7c6c6] mb-4">Plan Your Route</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="startInput" class="block mb-2 text-lg">Start Location</label>
+                        <input type="text" id="startInput" placeholder="e.g., Mumbai" class="w-full p-2 rounded bg-[#0d1a26] border border-gray-600 focus:outline-none focus:border-[#F3D9A1]">
+                    </div>
+                    <button id="userLocationButton" class="w-full bg-[#F3D9A1] text-black font-bold py-2 px-4 rounded hover:bg-opacity-80 transition-colors">Use My Location</button>
+                    <div>
+                        <label for="destinationInput" class="block mb-2 text-lg">Destination</label>
+                        <input type="text" id="destinationInput" placeholder="e.g., Delhi" class="w-full p-2 rounded bg-[#0d1a26] border border-gray-600 focus:outline-none focus:border-[#F3D9A1]">
+                    </div>
+                    <button id="findRouteButton" class="w-full bg-[#F3D9A1] text-black font-bold py-3 px-4 rounded-lg text-xl hover:bg-opacity-90 transition-all">Find Route</button>
+                </div>
+
+                <div id="results" class="mt-6">
+                    <p class="text-[#cfe0e0] italic">Enter a start and destination to see the route analysis.</p>
+                </div>
+            </div>
+
+            <div id="map" class="w-full h-[400px] lg:h-full rounded-lg shadow-lg bg-[#1a2b38]" style="min-height: 500px;"></div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
