@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentHazardMarkers = [];
     let currentSatelliteLayer = null;
 
-    const API_BASE_URL = 'http://127.0.0.1:5000';
+    const API_BASE_URL = 'https://satwatch-backend.onrender.com';
 
     function initializeMap() {
         map = L.map(mapDiv).setView([20.5937, 78.9629], 5); 
@@ -152,4 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     initializeMap();
+
 });
