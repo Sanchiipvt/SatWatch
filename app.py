@@ -16,9 +16,7 @@ geolocator = Nominatim(user_agent="satwatch-route-analyzer/1.0")
 # Define standard headers for external API requests
 HEADERS = {'User-Agent': 'satwatch-route-analyzer/1.0'}
 
-# --- Deployment Change 1: Load API Key from Environment Variable ---
 # Securely get the OpenWeatherMap API key from the server's environment variables.
-# This avoids hardcoding the secret key in the source code.
 OPENWEATHERMAP_API_KEY = os.environ.get('OPENWEATHERMAP_API_KEY')
 
 # A dictionary of predefined local advisories for high-risk areas
@@ -38,7 +36,7 @@ MOCK_LOCAL_ADVISORIES = {
         'details': 'General Advisory for Himachal: The state is prone to landslides and flash floods during monsoon (July-Sept) and heavy snowfall in winter (Dec-Feb). Always check local weather and road conditions.',
         'location_name': 'Himachal Pradesh'
     },
-     "Jammu": {
+    "Jammu": {
         'coords': [32.7266, 74.8570],
         'details': 'Landslide & Security Advisory: The Jammu-Srinagar highway (NH44) is prone to frequent closures due to landslides, especially near Ramban. Follow all security advisories and travel only during daylight hours.',
         'location_name': 'Jammu Region, J&K'
@@ -106,7 +104,7 @@ def fetch_local_advisories(end_loc_name):
     for loc_name, advisory in MOCK_LOCAL_ADVISORIES.items():
         if loc_name.lower() in end_loc_name.lower():
             local_hazards.append(advisory)
-            break  # Stop after finding the first match
+            break
     return local_hazards
 
 def fetch_and_check_gdacs_alerts(route_points):
@@ -115,7 +113,7 @@ def fetch_and_check_gdacs_alerts(route_points):
     gdacs_url = "https://www.gdacs.org/rss.aspx?format=geo&alertlevel=Orange,Red"
     try:
         response = requests.get(gdacs_url, timeout=10, headers=HEADERS)
-        response.raise_for_status()  # Raise an exception for bad status codes
+        response.raise_for_status()
         root = ET.fromstring(response.content)
         ns = {'georss': 'http://www.georss.org/georss'}
 
@@ -125,10 +123,9 @@ def fetch_and_check_gdacs_alerts(route_points):
             if point_elem is not None:
                 lat, lon = map(float, point_elem.text.split())
                 for route_point in route_points:
-                    # Check if any point on the route is within 50km of a GDACS alert
                     if haversine(route_point[0], route_point[1], lat, lon) < 50:
                         detected_hazards.append({'coords': [lat, lon], 'details': title, 'location_name': "Near your route"})
-                        break # Move to the next GDACS item once a hazard is found for the route
+                        break
     except Exception as e:
         print(f"Error fetching/parsing GDACS data: {e}")
     return detected_hazards
@@ -140,7 +137,6 @@ def fetch_weather_alerts(route_points):
         return []
 
     weather_hazards = []
-    # Check weather at the start, middle, and end of the route
     points_to_check = [route_points[0], route_points[len(route_points)//2], route_points[-1]]
     
     for point in points_to_check:
@@ -150,7 +146,6 @@ def fetch_weather_alerts(route_points):
             response = requests.get(weather_url, timeout=5)
             response.raise_for_status()
             data = response.json()
-            # Check for significant weather events (e.g., thunderstorms, snow, rain)
             if data.get('weather') and 200 <= data['weather'][0]['id'] < 800:
                 weather_hazards.append({
                     'coords': point,
@@ -164,10 +159,8 @@ def fetch_weather_alerts(route_points):
 def get_satellite_url(hazard_type=None):
     """Generates a dynamic NASA GIBS satellite imagery URL based on hazard type."""
     date_today = datetime.date.today().isoformat()
-    # Provide a specific thermal satellite layer for fire-related hazards
     if hazard_type and ('fire' in hazard_type.lower() or 'wildfire' in hazard_type.lower()):
         return f"https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/VIIRS_SNPP_Thermal_Anomalies_375m_All/default/{date_today}/250m/{{z}}/{{y}}/{{x}}.png"
-    # Default to a true-color satellite layer
     return f"https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{date_today}/250m/{{z}}/{{y}}/{{x}}.jpg"
 
 @app.route('/api/route', methods=['GET'])
@@ -179,7 +172,6 @@ def analyze_route():
     start_lon = request.args.get('start_lon')
 
     try:
-        # Geocode start location from name or use provided coordinates
         if start_loc_name:
             start_loc = geolocator.geocode(start_loc_name)
             if not start_loc: return jsonify({'error': 'Could not find start location'}), 404
@@ -191,7 +183,6 @@ def analyze_route():
         else:
             return jsonify({'error': 'Start location not provided'}), 400
 
-        # Geocode destination location
         end_loc = geolocator.geocode(end_loc_name)
         if not end_loc: return jsonify({'error': 'Could not find destination'}), 404
         end_coords = [end_loc.longitude, end_loc.latitude]
@@ -199,7 +190,6 @@ def analyze_route():
     except Exception as e:
         return jsonify({'error': f'Geocoding error: {str(e)}'}), 500
 
-    # Fetch route geometry from Open Source Routing Machine (OSRM)
     osrm_url = f"http://router.project-osrm.org/route/v1/driving/{start_coords[0]},{start_coords[1]};{end_coords[0]},{end_coords[1]}?overview=full&geometries=geojson"
     try:
         osrm_response = requests.get(osrm_url)
@@ -211,19 +201,15 @@ def analyze_route():
     if 'routes' not in osrm_data or not osrm_data['routes']:
         return jsonify({'error': 'Could not find a route between locations'}), 404
 
-    # Extract route coordinates, swapping lon/lat for Leaflet's lat/lon format
     route_points = [[p[1], p[0]] for p in osrm_data['routes'][0]['geometry']['coordinates']]
 
-    # Fetch all types of hazards
     local_hazards = fetch_local_advisories(end_name)
     gdacs_hazards = fetch_and_check_gdacs_alerts(route_points)
     weather_hazards = fetch_weather_alerts(route_points)
     all_hazards = local_hazards + gdacs_hazards + weather_hazards
     
-    # Get an appropriate satellite URL
     satellite_url = get_satellite_url(all_hazards[0]['details'] if all_hazards else None)
 
-    # Return the final analysis to the frontend
     return jsonify({
         'startName': start_name,
         'endName': end_name,
@@ -232,10 +218,3 @@ def analyze_route():
         'satelliteUrl': satellite_url
     })
 
-# --- Deployment Change 2: Remove Development Server Block ---
-# The following block is removed because a production WSGI server (like Gunicorn)
-# will be used to run the application, not the Flask development server.
-#
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000, debug=True)
- port=5000, debug=True)
